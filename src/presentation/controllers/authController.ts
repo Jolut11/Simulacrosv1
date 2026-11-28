@@ -1,15 +1,15 @@
-import { RegisterUser } from "../../application/useCases/registerUser.js";
-import { LoginUser } from "../../application/useCases/loginUser.js";
-import { LogoutUser } from "../../application/useCases/logoutUser.js";
-import { GetCurrentUser } from "../../application/useCases/getCurrentUser.js";
+import { RegisterUserUsecase } from "../../application/useCases/auth/RegisterUserUsecase.js";
+import { LoginUserUsecase } from "../../application/useCases/auth/LoginUserUsecase.js";
+import { LogoutUserUsecase } from "../../application/useCases/auth/LogoutUserUsecase.js";
+import { GetCurrentUserUsecase } from "../../application/useCases/auth/GetCurrentUserUsecase.js";
 
-export class authController {
+export class AuthController {
 
     constructor(
-        private registerUser: RegisterUser,
-        private loginUser: LoginUser,
-        private logoutUser: LogoutUser,
-        private getCurrentUser: GetCurrentUser
+        private registerUser: RegisterUserUsecase,
+        private loginUser: LoginUserUsecase,
+        private logoutUser: LogoutUserUsecase,
+        private getCurrentUser: GetCurrentUserUsecase
     ) { }
 
     async register(

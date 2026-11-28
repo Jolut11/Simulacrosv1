@@ -1,17 +1,17 @@
-import { authController } from "../presentation/controllers/authController.js";
-import { mockAuthProvider } from "../infrastructure/mock/mockAuthProvider.js";
-import { RegisterUser } from "../application/useCases/registerUser.js";
-import { LoginUser } from "../application/useCases/loginUser.js";
-import { LogoutUser } from "../application/useCases/logoutUser.js";
-import { GetCurrentUser } from "../application/useCases/getCurrentUser.js";
+import { authController } from "../presentation/controllers/AuthController.js";
+import { mockAuthProvider } from "../infrastructure/mock/MockAuthProvider.js";
+import { RegisterUserUsecase } from "../application/useCases/auth/RegisterUserUsecase.js";
+import { LoginUserUsecase } from "../application/useCases/auth/LoginUserUsecase.js";
+import { LogoutUserUsecase } from "../application/useCases/auth/LogoutUserUsecase.js";
+import { GetCurrentUserUsecase } from "../application/useCases/auth/GetCurrentUserUsecase.js";
 export class authContainer {
     static create() {
         const authProvider = new mockAuthProvider();
-        const registerUser = new RegisterUser(authProvider);
-        const loginUser = new LoginUser(authProvider);
-        const logoutUser = new LogoutUser(authProvider);
-        const getCurrentUser = new GetCurrentUser(authProvider);
+        const registerUser = new RegisterUserUsecase(authProvider);
+        const loginUser = new LoginUserUsecase(authProvider);
+        const logoutUser = new LogoutUserUsecase(authProvider);
+        const getCurrentUser = new GetCurrentUserUsecase(authProvider);
         return new authController(registerUser, loginUser, logoutUser, getCurrentUser);
     }
 }
-//# sourceMappingURL=authContainer.js.map
+//# sourceMappingURL=AuthContainer.js.map

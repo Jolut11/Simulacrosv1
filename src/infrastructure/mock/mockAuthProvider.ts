@@ -1,6 +1,6 @@
 
-import type { User } from "../../application/models/user";
-import type { IAuthProvider } from "../../application/interfaces/IauthProvider";
+import type { User } from "../../application/models/User.js";
+import type { IAuthProvider } from "../../application/interfaces/IAuthProvider.js";
 
 type mockRegisteredAccount = {
     email: string;
@@ -10,7 +10,9 @@ type mockRegisteredAccount = {
 
 export class mockAuthProvider implements IAuthProvider {
 
-    //CREAMOS LA LISTA DE CUENTAS REGISTRADAS CON 1 CUENTA DE PRUEBA PARA PODER PROBAR EL LOGIN
+    private readonly storageKey = "mock-auth-current-user";
+
+    // CUENTAS REGISTRADAS
     private registeredAccounts: mockRegisteredAccount[] = [
         {
             email: "jolut11@gmail.com",
@@ -23,16 +25,52 @@ export class mockAuthProvider implements IAuthProvider {
         }
     ];
 
-    private currentUser: User | null = null;
+    // RECUPERAMOS LA SESIÓN AL CREAR EL PROVIDER
+    private currentUser: User | null = this.loadCurrentUser();
 
-    register(email: string, password: string, displayName?: string): Promise<User> {
-        const existingAccount = this.registeredAccounts.find(account => account.email === email);
+    // OBTENER USUARIO ALMACENADO
+    private loadCurrentUser(): User | null {
+
+        const storedUser = localStorage.getItem(this.storageKey);
+
+        if (!storedUser) {
+            return null;
+        }
+
+        try {
+            return JSON.parse(storedUser) as User;
+        } catch {
+            localStorage.removeItem(this.storageKey);
+            return null;
+        }
+    }
+
+    // GUARDAR USUARIO ACTIVO
+    private saveCurrentUser(user: User): void {
+
+        this.currentUser = user;
+
+        localStorage.setItem(
+            this.storageKey,
+            JSON.stringify(user)
+        );
+    }
+
+    async register(
+        email: string,
+        password: string,
+        displayName?: string
+    ): Promise<User> {
+
+        const existingAccount = this.registeredAccounts.find(
+            account => account.email === email
+        );
 
         if (existingAccount) {
             throw new Error("Este correo ya está registrado");
         }
 
-        this.currentUser = {
+        const user: User = {
             id: crypto.randomUUID(),
             email,
             ...(displayName !== undefined && { displayName })
@@ -41,47 +79,41 @@ export class mockAuthProvider implements IAuthProvider {
         this.registeredAccounts.push({
             email,
             password,
-            user: this.currentUser
+            user
         });
 
-        return new Promise<User>((resolve) => {
-            resolve({
-                id: crypto.randomUUID(),
-                email,
-                ...(displayName !== undefined && { displayName })
-            });
-        });
+        this.saveCurrentUser(user);
+
+        return user;
     }
 
-    login(email: string, password: string): Promise<User> {
+    async login(email: string, password: string): Promise<User> {
 
-        const registeredAccount = this.registeredAccounts.find(account => account.email === email && account.password === password);
+        const registeredAccount = this.registeredAccounts.find(
+            account =>
+                account.email === email &&
+                account.password === password
+        );
 
         if (!registeredAccount) {
             throw new Error("Correo o contraseña incorrectos");
         }
 
-        this.currentUser = registeredAccount.user;
+        const user = registeredAccount.user;
 
-        return new Promise<User>((resolve) => {
-            resolve({
-                id: crypto.randomUUID(),
-                email,
-                displayName: registeredAccount.user?.displayName || ""
-            });
-        });
+        this.saveCurrentUser(user);
+
+        return user;
     }
 
-    logout(): Promise<void> {
-        return new Promise<void>((resolve) => {
-            this.currentUser = null;
-            resolve();
-        });
+    async logout(): Promise<void> {
+
+        this.currentUser = null;
+
+        localStorage.removeItem(this.storageKey);
     }
 
-    getCurrentUser(): Promise<User | null> {
-        return new Promise((resolve) => {
-            resolve(this.currentUser);
-        });
+    async getCurrentUser(): Promise<User | null> {
+        return this.currentUser;
     }
 }

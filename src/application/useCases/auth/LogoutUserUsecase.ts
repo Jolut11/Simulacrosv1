@@ -1,7 +1,7 @@
 
-import type { IAuthProvider } from "../interfaces/IauthProvider";
+import type { IAuthProvider } from "../../interfaces/IAuthProvider";
 
-export class LogoutUser {
+export class LogoutUserUsecase {
     constructor(
         private authProvider: IAuthProvider
     ) { }

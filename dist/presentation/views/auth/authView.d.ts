@@ -1,12 +1,14 @@
-import { authController } from "../../controllers/authController.js";
-export declare class authView {
+import type { AppNavigator } from "../../AppNavigator.js";
+import type { AuthController } from "../../controllers/AuthController.js";
+export declare class AuthView {
     private root;
     private auth;
-    constructor(root: HTMLElement, auth: authController);
+    private appNavigator;
+    constructor(root: HTMLElement, auth: AuthController, appNavigator: AppNavigator);
     render(): Promise<void>;
     private bindEvents;
     private handleLogin;
     private showMessage;
     private getElement;
 }
-//# sourceMappingURL=authView.d.ts.map
+//# sourceMappingURL=AuthView.d.ts.map

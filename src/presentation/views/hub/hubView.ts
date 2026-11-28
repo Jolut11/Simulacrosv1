@@ -1,16 +1,18 @@
 
-import type { User } from "../../../application/models/user.js";
-import { authController } from "../../controllers/authController.js";
-import { authView } from "../auth/authView.js";
+import type { User } from "../../../application/models/User.js";
+import type { UserData } from "../../../application/models/UserData.js";
+import type { AppNavigator } from "../../AppNavigator.js";
+import type { AuthController } from "../../controllers/AuthController.js";
 
-export class hubView {
+export class HubView {
 
     constructor(
         private root: HTMLElement,
-        private auth: authController
+        private auth: AuthController,
+        private appNavigator: AppNavigator,
     ) { }
 
-    async render(user: User): Promise<void> {
+    async render(user: User, userData: UserData): Promise<void> {
 
         const response = await fetch("./presentation/views/hub/hubTemplate.html");
 
@@ -24,6 +26,8 @@ export class hubView {
 
         this.getElement<HTMLSpanElement>("user-name")
             .textContent = user.displayName ?? user.email;
+
+        this.getElement<HTMLSpanElement>("saved-quiz").textContent = String(userData.savedQuizzes.length);
 
         this.bindEvents();
     }
@@ -42,8 +46,7 @@ export class hubView {
 
             await this.auth.logout();
 
-            const view = new authView(this.root, this.auth);
-            await view.render();
+            await this.appNavigator.showAuth();
 
         } catch (error) {
 

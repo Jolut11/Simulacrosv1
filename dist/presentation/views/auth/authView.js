@@ -1,9 +1,8 @@
-import { authController } from "../../controllers/authController.js";
-import { hubView } from "../hub/hubView.js";
-export class authView {
-    constructor(root, auth) {
+export class AuthView {
+    constructor(root, auth, appNavigator) {
         this.root = root;
         this.auth = auth;
+        this.appNavigator = appNavigator;
     }
     async render() {
         const response = await fetch("./presentation/views/auth/authTemplate.html");
@@ -27,8 +26,7 @@ export class authView {
         this.showMessage("");
         try {
             const user = await this.auth.login(email, password);
-            const view = new hubView(this.root, this.auth);
-            await view.render(user);
+            await this.appNavigator.showHub(user);
         }
         catch (error) {
             this.showMessage(error instanceof Error
@@ -48,4 +46,4 @@ export class authView {
         return element;
     }
 }
-//# sourceMappingURL=authView.js.map
+//# sourceMappingURL=AuthView.js.map

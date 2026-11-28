@@ -1,6 +1,7 @@
 export class mockAuthProvider {
     constructor() {
-        //CREAMOS LA LISTA DE CUENTAS REGISTRADAS CON 1 CUENTA DE PRUEBA PARA PODER PROBAR EL LOGIN
+        this.storageKey = "mock-auth-current-user";
+        // CUENTAS REGISTRADAS
         this.registeredAccounts = [
             {
                 email: "jolut11@gmail.com",
@@ -12,14 +13,34 @@ export class mockAuthProvider {
                 }
             }
         ];
-        this.currentUser = null;
+        // RECUPERAMOS LA SESIÓN AL CREAR EL PROVIDER
+        this.currentUser = this.loadCurrentUser();
     }
-    register(email, password, displayName) {
+    // OBTENER USUARIO ALMACENADO
+    loadCurrentUser() {
+        const storedUser = localStorage.getItem(this.storageKey);
+        if (!storedUser) {
+            return null;
+        }
+        try {
+            return JSON.parse(storedUser);
+        }
+        catch {
+            localStorage.removeItem(this.storageKey);
+            return null;
+        }
+    }
+    // GUARDAR USUARIO ACTIVO
+    saveCurrentUser(user) {
+        this.currentUser = user;
+        localStorage.setItem(this.storageKey, JSON.stringify(user));
+    }
+    async register(email, password, displayName) {
         const existingAccount = this.registeredAccounts.find(account => account.email === email);
         if (existingAccount) {
             throw new Error("Este correo ya está registrado");
         }
-        this.currentUser = {
+        const user = {
             id: crypto.randomUUID(),
             email,
             ...(displayName !== undefined && { displayName })
@@ -27,40 +48,27 @@ export class mockAuthProvider {
         this.registeredAccounts.push({
             email,
             password,
-            user: this.currentUser
+            user
         });
-        return new Promise((resolve) => {
-            resolve({
-                id: crypto.randomUUID(),
-                email,
-                ...(displayName !== undefined && { displayName })
-            });
-        });
+        this.saveCurrentUser(user);
+        return user;
     }
-    login(email, password) {
-        const registeredAccount = this.registeredAccounts.find(account => account.email === email && account.password === password);
+    async login(email, password) {
+        const registeredAccount = this.registeredAccounts.find(account => account.email === email &&
+            account.password === password);
         if (!registeredAccount) {
             throw new Error("Correo o contraseña incorrectos");
         }
-        this.currentUser = registeredAccount.user;
-        return new Promise((resolve) => {
-            resolve({
-                id: crypto.randomUUID(),
-                email,
-                displayName: registeredAccount.user?.displayName || ""
-            });
-        });
+        const user = registeredAccount.user;
+        this.saveCurrentUser(user);
+        return user;
     }
-    logout() {
-        return new Promise((resolve) => {
-            this.currentUser = null;
-            resolve();
-        });
+    async logout() {
+        this.currentUser = null;
+        localStorage.removeItem(this.storageKey);
     }
-    getCurrentUser() {
-        return new Promise((resolve) => {
-            resolve(this.currentUser);
-        });
+    async getCurrentUser() {
+        return this.currentUser;
     }
 }
-//# sourceMappingURL=mockAuthProvider.js.map
+//# sourceMappingURL=MockAuthProvider.js.map

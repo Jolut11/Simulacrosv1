@@ -1,15 +1,9 @@
+import { Container } from "./dependencyInjection/Container.js";
 
-import { authContainer } from "./dependencyInjection/authContainer.js";
-import { authView } from "./presentation/views/auth/authView.js";
+async function main(): Promise<void> {
+    const appNavigator = Container.createAppNavigator();
 
-const auth = authContainer.create();
-
-const root = document.querySelector<HTMLElement>("#app");
-
-if (!root) {
-    throw new Error("No se encontró el elemento #app");
+    await appNavigator.start();
 }
 
-const view = new authView(root, auth);
-
-void view.render();
+void main();

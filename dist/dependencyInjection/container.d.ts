@@ -1,4 +1,9 @@
+import { AuthController } from "../presentation/controllers/AuthController.js";
+import { UserDataController } from "../presentation/controllers/UserDataController.js";
+import { AppNavigator } from "../presentation/AppNavigator.js";
 export declare class Container {
-    static get auth(): any;
+    static createAppNavigator(): AppNavigator;
+    static createAuthController(): AuthController;
+    static createUserDataController(): UserDataController;
 }
-//# sourceMappingURL=container.d.ts.map
+//# sourceMappingURL=Container.d.ts.map

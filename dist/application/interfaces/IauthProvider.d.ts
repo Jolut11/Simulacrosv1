@@ -1,4 +1,4 @@
-import type { User } from "../models/user";
+import type { User } from "../models/User";
 export interface IAuthProvider {
     register(email: string, password: string, displayName?: string): Promise<User>;
     login(email: string, password: string): Promise<User>;

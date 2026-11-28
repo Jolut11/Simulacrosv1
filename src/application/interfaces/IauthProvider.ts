@@ -2,7 +2,7 @@
 // TODOS LOS PROVEEDORES DE AUTENTICACIÓN (AuthProvider) DE LA APLICACIÓN
 
 
-import type { User } from "../models/user";
+import type { User } from "../models/User";
 
 export interface IAuthProvider {
     register(

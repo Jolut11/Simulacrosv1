@@ -1,10 +1,7 @@
-import { authContainer } from "./dependencyInjection/authContainer.js";
-import { authView } from "./presentation/views/auth/authView.js";
-const auth = authContainer.create();
-const root = document.querySelector("#app");
-if (!root) {
-    throw new Error("No se encontró el elemento #app");
+import { Container } from "./dependencyInjection/Container.js";
+async function main() {
+    const appNavigator = Container.createAppNavigator();
+    await appNavigator.start();
 }
-const view = new authView(root, auth);
-void view.render();
+void main();
 //# sourceMappingURL=main.js.map

@@ -1,5 +1,5 @@
-import { authController } from "../presentation/controllers/authController.js";
+import { authController } from "../presentation/controllers/AuthController.js";
 export declare class authContainer {
     static create(): authController;
 }
-//# sourceMappingURL=authContainer.d.ts.map
+//# sourceMappingURL=AuthContainer.d.ts.map

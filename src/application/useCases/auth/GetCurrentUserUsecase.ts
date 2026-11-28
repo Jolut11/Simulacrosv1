@@ -1,8 +1,8 @@
 
-import type { IAuthProvider } from "../interfaces/IauthProvider";
-import type { User } from "../models/user";
+import type { IAuthProvider } from "../../interfaces/IAuthProvider";
+import type { User } from "../../models/User";
 
-export class GetCurrentUser {
+export class GetCurrentUserUsecase {
     constructor(
         private authProvider: IAuthProvider
     ) { }

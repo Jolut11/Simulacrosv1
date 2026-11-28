@@ -1,12 +1,13 @@
 
-import { authController } from "../../controllers/authController.js";
-import { hubView } from "../hub/hubView.js";
+import type { AppNavigator } from "../../AppNavigator.js";
+import type { AuthController } from "../../controllers/AuthController.js";
 
-export class authView {
+export class AuthView {
 
     constructor(
         private root: HTMLElement,
-        private auth: authController
+        private auth: AuthController,
+        private appNavigator: AppNavigator,
     ) { }
 
     async render(): Promise<void> {
@@ -42,11 +43,9 @@ export class authView {
         this.showMessage("");
 
         try {
-
             const user = await this.auth.login(email, password);
 
-            const view = new hubView(this.root, this.auth);
-            await view.render(user);
+            await this.appNavigator.showHub(user);
 
         } catch (error) {
 

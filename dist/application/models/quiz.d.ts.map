@@ -1,0 +1,1 @@
+{"version":3,"file":"quiz.d.ts","sourceRoot":"","sources":["../../../src/application/models/quiz.ts"],"names":[],"mappings":"AAAA,MAAM,WAAW,IAAI;IACjB,EAAE,EAAE,MAAM,CAAC;IACX,SAAS,EAAE,QAAQ,EAAE,CAAC;CACzB;AAED,MAAM,WAAW,QAAQ;IACrB,YAAY,EAAE,MAAM,CAAC;IACrB,OAAO,EAAE,MAAM,EAAE,CAAC;IAClB,kBAAkB,EAAE,MAAM,CAAC;CAC9B"}

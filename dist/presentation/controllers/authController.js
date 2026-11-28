@@ -1,8 +1,8 @@
-import { RegisterUser } from "../../application/useCases/registerUser.js";
-import { LoginUser } from "../../application/useCases/loginUser.js";
-import { LogoutUser } from "../../application/useCases/logoutUser.js";
-import { GetCurrentUser } from "../../application/useCases/getCurrentUser.js";
-export class authController {
+import { RegisterUserUsecase } from "../../application/useCases/auth/RegisterUserUsecase.js";
+import { LoginUserUsecase } from "../../application/useCases/auth/LoginUserUsecase.js";
+import { LogoutUserUsecase } from "../../application/useCases/auth/LogoutUserUsecase.js";
+import { GetCurrentUserUsecase } from "../../application/useCases/auth/GetCurrentUserUsecase.js";
+export class AuthController {
     constructor(registerUser, loginUser, logoutUser, getCurrentUser) {
         this.registerUser = registerUser;
         this.loginUser = loginUser;
@@ -22,4 +22,4 @@ export class authController {
         return await this.getCurrentUser.execute();
     }
 }
-//# sourceMappingURL=authController.js.map
+//# sourceMappingURL=AuthController.js.map
